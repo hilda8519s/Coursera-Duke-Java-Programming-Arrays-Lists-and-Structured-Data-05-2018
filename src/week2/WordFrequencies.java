@@ -3,79 +3,71 @@ import java.util.*;
 import edu.duke.*;
 import java.io.*;
 public class WordFrequencies {
-	 /* kth position in myFreqs represents # of times kth word in myWords occurs in file */
-    private static ArrayList<String> myWords;
-    private static ArrayList<Integer> myFreqs;
+	 /*
+	    * Create two private variables. One is called myWords and should be an ArrayList of type String to store unique
+	    * words from a file, and one is called myFreqs and should be an ArrayList of type Integer. The kth position in
+	    * myFreqs should represent the number of times the kth word in myWords occurs in the file.
+	    */
+	    private ArrayList<Integer> myFreqs;
+	    private ArrayList<String> myWords;
 
-    public WordFrequencies() {
-        myWords = new ArrayList<>();
-        myFreqs = new ArrayList<>();
-    }
+	    /*
+	    * Write a constructor WordFrequencies, and initialize the private variables.
+	    */
+	    public WordFrequencies() {
+	        this.myFreqs = new ArrayList<>();
+	        this.myWords = new ArrayList<>();
+	    }
 
+	    /*
+	    * Write a void method findUnique that has no parameters. This method should first clear both myWords and myFreqs,
+	    * using the .clear() method. Then it selects a file and then iterates over every word in the file, putting the
+	    * unique words found into myWords. For each word in the kth position of myWords, it puts the count of how many times
+	    * that word occurs from the selected file into the kth position of myFreqs, as was demonstrated in the lesson.
+	    */
 
-    /* Clear myWords and myFreqs with .clear()
-     * Select file, iterate over every word in file
-     * if word is unique, place in myWords.
-     * Each time word in  myWords is encountered, myFreq(k) is
-     * incremented by 1.
-     *  */
-    
-    
-    public static void findUnique() {
-    	/*if(myWords == null)
-    		throw new NullPointerException();
-    	if(myFreqs == null)
-    		throw new NullPointerException();*/
-    	myWords.clear();
-        myFreqs.clear();
-    	
-        FileResource file = new FileResource();
-        for (String word : file.words()) {
-            int index = myWords.indexOf(word.toLowerCase());
-            if (index != -1) {                          //if item occurs in myWords
-                int value = myFreqs.get(index);
-                myFreqs.add(index, value+1);    //increment value at index by 1
-            } else if (index == -1) {
-                myWords.add(word.toLowerCase());        //assuming myWords and MyFreqs are same size
-                myFreqs.add(1);
-            }
-        }
-    }
+	    private void findUnique() {
+	        this.myFreqs.clear();
+	        this.myWords.clear();
 
-    /* Returns index of location of largest value in myFreqs.
-     * If tie occurs then first occurrence is returned.
-     */
-    static int findIndexOfMax() {
-        int max = 0;
-        int indexOfMax = 0;
-        for (int i = 0; i < myFreqs.size(); i++) {
-            int currentValue = myFreqs.get(i);
-            if (currentValue > max) {
-                max = currentValue;
-                indexOfMax = i;
-            }
-        }
-        return indexOfMax;
-    }
+	        FileResource fr = new FileResource();
+	        for (String s : fr.words()) {
+	            if (!this.myWords.contains(s.toLowerCase())) {
+	                this.myWords.add(s.toLowerCase());
+	                this.myFreqs.add(1);
+	            } else {
+	                this.myFreqs.set(this.myWords.indexOf(s.toLowerCase()), this.myFreqs.get(this.myWords.indexOf(s.toLowerCase())) + 1);
+	            }
+	        }
+	    }
 
-    /* Call findUnique(), print out number of unique words and
-     * the number of times they occur from myFreqs.
-     * Will also determine and print word that occurs most often
-     * in selected file and how many times it occurs.
-     * */
-    public static void tester() {
-        findUnique();
-        int size = myWords.size();
-        int indexOfMax = findIndexOfMax();
-        System.out.println("Number of unique words: " + size);
-        /*for (int i = 0; i < size-1; i++) {
-            System.out.println(myFreqs.get(i) + " " + myWords.get(i));
-        }*/
-        System.out.println("The word that occurs most often and its count are: "
-                            + myWords.get(indexOfMax) + " " + myFreqs.get(indexOfMax));
-    }
+	    /*
+	    * Write a void tester method that has no parameters. This method should call findUnique. Then print out the number
+	    * of unique words, and for each unique word, print the frequency of each word and the word, as was demonstrated in
+	    * the lesson.
+	    */
 
-    public static void main(String args[]) {
-    	tester();
-    }
+	    public void tester() {
+	        this.findUnique();
+	        System.out.println("unique: " + this.myWords.size());
+	        System.out.println(
+	                "index of max(from 0): " + this.findIndexOfMax() +
+	                        " word is \"" + this.myWords.get(this.findIndexOfMax()) +
+	                        "\" with counts " + this.myFreqs.get(this.findIndexOfMax())
+	        );
+	        System.out.println(this.myFreqs + "\n" + this.myWords);
+	    }
+
+	    /*
+	    * Write the method findIndexOfMax that has no parameters. This method returns an int that is the index location of
+	    * the largest value in myFreqs. If there is a tie, then return the first such value.
+	    */
+
+	    private int findIndexOfMax() {
+	        int max = this.myFreqs.stream().max(Integer::compareTo).orElse(-1);
+	        return this.myFreqs.indexOf(max);
+	    }
+	    
+	  
+
 }
